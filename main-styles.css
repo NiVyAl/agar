@@ -61,6 +61,20 @@ body {
     opacity: 0.3;
 }
 
+.inner, .inner-reverse {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    background-color: yellow;
+}
+
+.inner-reverse {
+    background-color: orange;
+    right: 0;
+}
+
+/* 
+
 .grad::before, .grad::after {
     width: 50%;
     height: 100%;
@@ -68,17 +82,18 @@ body {
     display: inline-block;
     background-color: yellow;
     
-    position: absolute; /* костыль, выпадал из родителя */
+    position: absolute; /* костыль, выпадал из родителя /
 }
 
 .grad::after {
-    right: 0; /* костыль */
+    right: 0; /* костыль /
     background-color: orange;
 }
 
 .deg-1 {
     transform: rotate(1deg);
 }
+*/
 
 
 
