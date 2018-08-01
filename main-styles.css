@@ -18,11 +18,11 @@ body {
     display: block;
     position: relative;
     transition: 1s ease all;
-    /transform: translate(500px, 100px);
+    /transform: translate(-1000px, -100px);
 }
 
 .detector {
-    width: 300px;
+    width: 100%;
     height: 300px;
     background-color: blue;
     z-index: 9;
@@ -52,20 +52,37 @@ body {
     z-index: 2;
 }
 
-.grad-container {
+.grad {
     width: 100%;
     height: 10px;
     top: 145px;
-    
     background-color: green;
     position: absolute;
+    opacity: 0.3;
 }
 
-.grad-1 {
+.grad::before, .grad::after {
     width: 50%;
     height: 100%;
+    content: "";
+    display: inline-block;
     background-color: yellow;
+    
+    position: absolute; /* костыль, выпадал из родителя */
 }
+
+.grad::after {
+    right: 0; /* костыль */
+    background-color: orange;
+}
+
+.deg-1 {
+    transform: rotate(1deg);
+}
+
+
+
+/* */
 
 .food {
     width: 1%;
