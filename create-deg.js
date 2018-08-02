@@ -8,27 +8,17 @@ for (var i=0; i<180; i++) {
     grad[i].classList.add('grad');
     grad[i].style.cssText = 'transform: rotate(' + i + 'deg)';
     var reverse = i+180;
-    //grad[i].id = i;
-    //grad[i].value = 'onmouseover="move(' + i + ')';
-    grad[i].innerHTML = '<div class="inner" onmouseover="move(' + i + ')"></div><div class="inner-reverse" onmouseover="move(' + reverse + ')"></div>';
-
-    /*
-    $(grad[i]).hover(function(){
-        time = Date.now();
-        var grad = $(this);
-        console.log(grad);
-        /*
-        console.log('enter: ' + time);
-        console.log('grad[i]: ' + grad[i]); 
-
-    },function(){
-        time = Date.now() - time;
-        console.log('exit: ' + time);
-    }
-    );
-    */
+    grad[i].innerHTML = '<div class="inner" onmouseenter="move(' + i + ', event)" onmouseleave="move(' + i + ', event)"></div><div class="inner-reverse" onmouseenter="move(' + reverse + ', event)" onmouseleave="move(' + reverse + ', event)"></div>';
 };
 
-var move = function(deg) {
-    console.log(deg);
+var move = function(deg, event) {
+    console.log(deg + ': ' + event.type);
+    /*
+    while(event.type == 'mouseenter') {
+        var time = Date.now();
+        while(time > 10) {
+            time = Date.now() - time;
+        };
+        console.log('1s')
+    }*/
 }
