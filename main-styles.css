@@ -13,13 +13,20 @@ body {
     background-color: white;
     background-image: url('background.png');
     border: 1px solid #cccccc;
-    width: 2000px;
-    height: 1000px;
+    width: 3000px;
+    height: 1500px;
     display: block;
     position: relative;
-    //transition: 1s ease all; /* резкий скачок, когда убрал курсор */
-    transition: 0.1s all;
-    /transform: translate(-1000px, -100px);
+    /transition: 1s ease all; /* резкий скачок, когда убрал курсор */
+    /transition: 0.1s all;
+    /transform: translate(-2950px, 0px);
+    
+    position: absolute;
+    top: 0;
+    right: 0px;
+    left: 50%;
+    bottom: 0;
+    margin: auto;
 }
 
 .detector {
