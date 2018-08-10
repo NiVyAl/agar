@@ -3,6 +3,8 @@ var grad = new Array();
 var time;
 var intervalId;
 var square = document.querySelector('.square');
+var changeX = 0;
+var changeY = 0;
 
 var cordinateX = Math.floor(Math.random() * 2950) + 50;
 var cordinateY = Math.floor(Math.random() * 1400) - 700;
@@ -23,21 +25,38 @@ for (var i=0; i<180; i++) {
     grad[i].innerHTML = '<div class="inner" onmouseenter="move2(' + reverse + ')"></div><div class="inner-reverse" onmouseenter="move2(' + i + ')"></div>';
 };
 
-var mainInterval = setInterval(function(){
-    //console.log('interval');
-    move2();
-    square.style.transform = 'translate(' + cordinateX + 'px, ' + cordinateY + 'px)';
-    //console.log(cordinateX);
-    //console.log(cordinateY);
-    
-}, 100);
-
 var move2 = function(deg) {
-    //console.log(deg);
-    var x = 90 - deg;
-    cordinateX = x;
-    cordinateY = 90 - x;
+    if ((deg <= 90) && (deg >= 0)) {
+        changeX = 1 - deg/90;
+        changeY = 1 - changeX;
+    }
+    
+    if ((deg > 90) && (deg <= 180)){
+        changeY = 1 - deg/180;
+        changeX = -(1 - changeY);
+    }
+    
+    if ((deg > 180) && (deg <= 270)) {
+        changeX = -(1 - deg/270);
+        changeY = -(1 - changeX);
+    }
+    
+    if ((deg > 270) && (deg <= 360)){
+        changeY = 1 - deg/180;
+        changeX = 1 - changeY;
+    }
+    
 }
+
+var mainInterval = setInterval(function(){
+    
+    cordinateX = changeX + cordinateX;
+    cordinateY = changeY + cordinateY;
+    
+    square.style.transform = 'translate(' + (-cordinateX) + 'px, ' + (cordinateY) + 'px)';
+    
+    
+}, 10);
 
 
 var move = function(deg, event) {
