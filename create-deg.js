@@ -3,6 +3,8 @@ var grad = new Array();
 var time;
 var intervalId;
 var square = document.querySelector('.square');
+var mapPlayer = document.getElementById('mapPlayer');
+
 var changeX = 0;
 var changeY = 0;
 
@@ -36,13 +38,13 @@ var move2 = function(deg) {
         changeX = -(1 - changeY);
     }
     
-    if ((deg > 180) && (deg <= 270)) {
+    if ((deg > 180) && (deg <= 270)){
         changeX = -(1 - deg/270);
         changeY = -(1 - changeX);
     }
     
     if ((deg > 270) && (deg <= 360)){
-        changeY = 1 - deg/180;
+        changeY = -(1 - deg/360);
         changeX = 1 - changeY;
     }
     
@@ -50,10 +52,16 @@ var move2 = function(deg) {
 
 var mainInterval = setInterval(function(){
     
-    cordinateX = changeX + cordinateX;
-    cordinateY = changeY + cordinateY;
+    if ((50 < (changeX + cordinateX)) && (2950 > (changeX + cordinateX)) ) {
+        cordinateX = changeX + cordinateX;
+    };
+    
+    if ( ((changeY + cordinateY) > -700) && ((changeY + cordinateY) < 700) ) {
+        cordinateY = changeY + cordinateY;
+    }
     
     square.style.transform = 'translate(' + (-cordinateX) + 'px, ' + (cordinateY) + 'px)';
+    mapPlayer.style.transform = 'translate(' + (cordinateX/10) + 'px, ' + (-cordinateY/10) + 'px)';
     
     
 }, 10);
