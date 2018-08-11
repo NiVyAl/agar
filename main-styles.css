@@ -77,11 +77,11 @@ body {
     width: 50%;
     height: 100%;
     position: absolute;
-    background-color: yellow;
+    //background-color: yellow;
 }
 
 .inner-reverse {
-    background-color: orange;
+    //background-color: orange;
     right: 0;
 }
 
@@ -133,12 +133,15 @@ body {
 /* */
 
 .food {
-    width: 1%;
-    height: 2%;
+    width: 30px;
+    height: 30px;
     background-color: green;
     border: 1px solid darkgreen;
     border-radius: 50%;
-    /position: absolute;
+    position: absolute;
+    left: 0px;
+    top: 50%;
+    margin-top: -15px;
 }
 
 .big-food {

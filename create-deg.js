@@ -10,7 +10,28 @@ var changeY = 0;
 
 var cordinateX = Math.floor(Math.random() * 2950) + 50;
 var cordinateY = Math.floor(Math.random() * 1400) - 700;
-square.style.transform = 'translate(' + (-cordinateX) +'px, ' + (-cordinateY) + 'px)'
+square.style.transform = 'translate(' + (-cordinateX) +'px, ' + (-cordinateY) + 'px)';
+
+
+/* food */
+var foods = new Array();
+
+for (var i=0; i<100; i++) {
+    foods[i] = document.createElement('div');            
+    square.appendChild(foods[i]);
+    foods[i].classList.add('food');
+    foods[i].classList.add(i);
+    var x = Math.floor(Math.random() * 2950) + 50;
+    var y = Math.floor(Math.random() * 1400) - 700
+    foods[i].style.transform = 'translate(' + x +'px, ' + y + 'px)'
+    
+    foods[i] = {
+        foodCordinateX: x,
+        foodCordinateY: y  
+    };
+    
+};
+/* */
 
 
 var radian = function(deg) {
@@ -63,6 +84,16 @@ var mainInterval = setInterval(function(){
     square.style.transform = 'translate(' + (-cordinateX) + 'px, ' + (cordinateY) + 'px)';
     mapPlayer.style.transform = 'translate(' + (cordinateX/10) + 'px, ' + (-cordinateY/10) + 'px)';
     
+    /* eat */
+        for (var i=0; i<100; i++){
+            if ( ( (cordinateX - foods[i].foodCordinateX) > -50 ) && ( (cordinateX - foods[i].foodCordinateX) < 50 ) && ( (cordinateY - foods[i].foodCordinateY) > -50 ) && ( (cordinateY - foods[i].foodCordinateY) < 50 ) ) {
+                console.log('eat');
+                
+                // 50 - разница координат
+            }
+        }    
+        
+    /* */
     
 }, 10);
 
