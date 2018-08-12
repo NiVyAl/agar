@@ -61,7 +61,10 @@ body {
     margin: auto;
     z-index: 2;
     
+    font-size: 18px;
+    
     box-sizing: border-box;
+    transition: 0.5s ease all;
 }
 
 .grad {
@@ -126,7 +129,9 @@ body {
     border-width: 0.5px;
     
     top: 50%;
-    margin-top: -5px
+    margin-top: -5px;
+    
+    transition: 0.5s ease all;
 }
 
 

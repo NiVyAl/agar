@@ -4,6 +4,10 @@ var time;
 var intervalId;
 var square = document.querySelector('.square');
 var mapPlayer = document.getElementById('mapPlayer');
+var player = document.querySelector('.player');
+var playerDiameter = 100;
+var eatDistance = 50;
+var playerFontSize = 18;
 
 var changeX = 0;
 var changeY = 0;
@@ -20,7 +24,7 @@ for (var i=0; i<100; i++) {
     foods[i] = document.createElement('div');            
     square.appendChild(foods[i]);
     foods[i].classList.add('food');
-    foods[i].classList.add(i);
+    foods[i].classList.add('food-' + i);
     var x = Math.floor(Math.random() * 2950) + 50;
     var y = Math.floor(Math.random() * 1400) - 700
     foods[i].style.transform = 'translate(' + x +'px, ' + y + 'px)'
@@ -31,6 +35,22 @@ for (var i=0; i<100; i++) {
     };
     
 };
+
+var eat = function(typeFood) {
+    if (typeFood == 'food') {
+        playerDiameter = playerDiameter + 30;
+        player.style.width = playerDiameter + 'px';
+        player.style.height = playerDiameter + 'px';
+        player.style.lineHeight = (playerDiameter-10) + 'px';
+        
+        mapPlayer.style.width = (playerDiameter/10) + 'px';
+        mapPlayer.style.height = (playerDiameter/10) + 'px';
+        
+        eatDistance = eatDistance + 15;
+        playerFontSize = playerFontSize + 5;
+        player.style.fontSize = playerFontSize + 'px';
+    }
+}
 /* */
 
 
@@ -86,8 +106,14 @@ var mainInterval = setInterval(function(){
     
     /* eat */
         for (var i=0; i<100; i++){
-            if ( ( (cordinateX - foods[i].foodCordinateX) > -50 ) && ( (cordinateX - foods[i].foodCordinateX) < 50 ) && ( (cordinateY - foods[i].foodCordinateY) > -50 ) && ( (cordinateY - foods[i].foodCordinateY) < 50 ) ) {
+            if ( ( (cordinateX - foods[i].foodCordinateX) > -eatDistance ) && ( (cordinateX - foods[i].foodCordinateX) < eatDistance ) && ( ((-cordinateY) - foods[i].foodCordinateY) > -eatDistance ) && ( ((-cordinateY) - foods[i].foodCordinateY) < eatDistance ) ) {
                 console.log('eat');
+                console.log('x: ' + foods[i].foodCordinateX);
+                console.log('y: ' + foods[i].foodCordinateY);
+                foods[i].foodCordinateX = 0;
+                foods[i].foodCordinateY = 1500;
+                document.querySelector('.food-' + i).style.display = 'none';
+                eat('food');
                 
                 // 50 - разница координат
             }
