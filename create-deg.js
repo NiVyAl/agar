@@ -79,20 +79,27 @@ var move2 = function(deg) {
     }
     
     if ((deg > 90) && (deg <= 180)){
-        changeY = 1 - deg/180;
+        deg = deg - 90
+        changeY = 1 - deg/90;
         changeX = -(1 - changeY);
     }
     
     if ((deg > 180) && (deg <= 270)){
-        changeX = -(1 - deg/270);
-        changeY = -(1 - changeX);
+        deg = deg - 180;
+        changeX = -(1 - deg/90);
+        changeY = -(1 + changeX);
     }
     
     if ((deg > 270) && (deg <= 360)){
-        changeY = -(1 - deg/360);
-        changeX = 1 - changeY;
+        deg = deg - 270;
+        changeY = -(1 - deg/90);
+        changeX = 1 + changeY;
     }
     
+    changeX = changeX * (10 - playerDiameter/40); // если игрок больше 400px то движемся в обратную сторону
+    changeY = changeY * (10 - playerDiameter/40);
+    console.log('changeX: ' + changeX);
+    console.log('changeY: ' + changeY);
 }
 
 var mainInterval = setInterval(function(){

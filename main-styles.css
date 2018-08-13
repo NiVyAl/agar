@@ -73,14 +73,14 @@ body {
     top: 145px;
     /background-color: green;
     position: absolute;
-    opacity: 0.1;
+    /opacity: 0.1;
 }
 
 .inner, .inner-reverse {
     width: 50%;
     height: 100%;
     position: absolute;
-    //background-color: yellow;
+    /background-color: yellow;
 }
 
 .inner-reverse {
