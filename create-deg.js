@@ -20,25 +20,33 @@ square.style.transform = 'translate(' + (-cordinateX) +'px, ' + (-cordinateY) + 
 /* food */
 var foods = new Array();
 
+var computFoodCordinate = function(numberFood){
+    var x = Math.floor(Math.random() * 2900) + 50;
+    var y = Math.floor(Math.random() * 1400) - 700
+    document.querySelector('.food-' + numberFood).style.transform = 'translate(' + x +'px, ' + y + 'px)'
+    
+    foods[numberFood] = {
+        foodCordinateX: x,
+        foodCordinateY: y  
+    };
+}
+
 for (var i=0; i<100; i++) {
     foods[i] = document.createElement('div');            
     square.appendChild(foods[i]);
     foods[i].classList.add('food');
     foods[i].classList.add('food-' + i);
-    var x = Math.floor(Math.random() * 2950) + 50;
-    var y = Math.floor(Math.random() * 1400) - 700
-    foods[i].style.transform = 'translate(' + x +'px, ' + y + 'px)'
     
-    foods[i] = {
-        foodCordinateX: x,
-        foodCordinateY: y  
-    };
+    computFoodCordinate(i);
     
 };
 
 var eat = function(typeFood) {
     if (typeFood == 'food') {
-        playerDiameter = playerDiameter + 30;
+        var increaseProcent = playerDiameter;
+        playerDiameter = Math.sqrt(Math.pow(playerDiameter, 2) + Math.pow(30, 2));
+        increaseProcent = playerDiameter/increaseProcent;
+
         player.style.width = playerDiameter + 'px';
         player.style.height = playerDiameter + 'px';
         player.style.lineHeight = (playerDiameter-10) + 'px';
@@ -46,18 +54,14 @@ var eat = function(typeFood) {
         mapPlayer.style.width = (playerDiameter/10) + 'px';
         mapPlayer.style.height = (playerDiameter/10) + 'px';
         
-        eatDistance = eatDistance + 15;
-        playerFontSize = playerFontSize + 5;
+        eatDistance = playerDiameter/2;
+        
+        playerFontSize = playerFontSize * increaseProcent;
         player.style.fontSize = playerFontSize + 'px';
     }
 }
 /* */
 
-
-var radian = function(deg) {
-    var rad = (deg * Math.PI)/180;
-    return rad
-};
 
 for (var i=0; i<180; i++) {
     grad[i] = document.createElement('div');
@@ -93,11 +97,11 @@ var move2 = function(deg) {
 
 var mainInterval = setInterval(function(){
     
-    if ((50 < (changeX + cordinateX)) && (2950 > (changeX + cordinateX)) ) {
+    if (((playerDiameter/2) < (changeX + cordinateX)) && ((3000-playerDiameter/2) > (changeX + cordinateX)) ) {
         cordinateX = changeX + cordinateX;
     };
     
-    if ( ((changeY + cordinateY) > -700) && ((changeY + cordinateY) < 700) ) {
+    if ( ((changeY + cordinateY) > (-750 + playerDiameter/2)) && ((changeY + cordinateY) < (750 - playerDiameter/2) ) ) {
         cordinateY = changeY + cordinateY;
     }
     
@@ -105,43 +109,36 @@ var mainInterval = setInterval(function(){
     mapPlayer.style.transform = 'translate(' + (cordinateX/10) + 'px, ' + (-cordinateY/10) + 'px)';
     
     /* eat */
-        for (var i=0; i<100; i++){
-            if ( ( (cordinateX - foods[i].foodCordinateX) > -eatDistance ) && ( (cordinateX - foods[i].foodCordinateX) < eatDistance ) && ( ((-cordinateY) - foods[i].foodCordinateY) > -eatDistance ) && ( ((-cordinateY) - foods[i].foodCordinateY) < eatDistance ) ) {
-                console.log('eat');
-                console.log('x: ' + foods[i].foodCordinateX);
-                console.log('y: ' + foods[i].foodCordinateY);
-                foods[i].foodCordinateX = 0;
-                foods[i].foodCordinateY = 1500;
-                document.querySelector('.food-' + i).style.display = 'none';
-                eat('food');
-                
-                // 50 - разница координат
-            }
-        }    
+    for (var i=0; i<100; i++){
+        if ( ( (cordinateX - foods[i].foodCordinateX) > -eatDistance ) && ( (cordinateX - foods[i].foodCordinateX) < eatDistance ) && ( ((-cordinateY) - foods[i].foodCordinateY) > -eatDistance ) && ( ((-cordinateY) - foods[i].foodCordinateY) < eatDistance ) ) {
+            
+            computFoodCordinate(i);
+            eat('food');
+        }
+    }    
         
     /* */
     
 }, 10);
 
 
+/* старая функция
+
+var radian = function(deg) {
+    var rad = (deg * Math.PI)/180;
+    return rad
+};
+
 var move = function(deg, event) {
     var hypothesis = 0;
     
-    /*
-    console.log('Угол: ' + deg);
-    console.log('cos: ' + Math.cos(deg));
-    console.log('sin: ' + Math.sin(deg)); */
     
     intervalId = setInterval(function(){
-        //console.log('interval');
         hypothesis = hypothesis + 1;
         
         cordinateX = (Math.cos(deg) * hypothesis) + cordinateX;
         var fixCordinateX = -cordinateX
         cordinateY = (Math.sin(deg) * hypothesis) + cordinateY;
-        
-        /*console.log('X: ' + cordinateX);
-        console.log('Y: ' + cordinateY); */
         
         square.style.transform = 'translate(' + fixCordinateX + 'px, ' + cordinateY + 'px)';
     }, 100);    
@@ -149,6 +146,6 @@ var move = function(deg, event) {
 };
 
 var stop = function(deg, event) {
-    //console.log('leave')
     clearInterval(intervalId);
 };
+*/
