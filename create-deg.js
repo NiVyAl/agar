@@ -54,7 +54,7 @@ var eat = function(typeFood) {
         mapPlayer.style.width = (playerDiameter/10) + 'px';
         mapPlayer.style.height = (playerDiameter/10) + 'px';
         
-        eatDistance = playerDiameter/2;
+        eatDistance = playerDiameter*0.4;
         
         playerFontSize = playerFontSize * increaseProcent;
         player.style.fontSize = playerFontSize + 'px';
@@ -63,7 +63,7 @@ var eat = function(typeFood) {
 /* */
 
 
-for (var i=0; i<180; i++) {
+for (var i=0; i<180; i++) {     /* генерация градусов */
     grad[i] = document.createElement('div');
     detector.appendChild(grad[i]);
     grad[i].classList.add('grad');
@@ -100,7 +100,16 @@ var move2 = function(deg) {
     changeY = changeY * (10 - playerDiameter/40);
     console.log('changeX: ' + changeX);
     console.log('changeY: ' + changeY);
+    
+    /* анимация поедания */
+    
+    if (((deg > 45) && (deg < 135)) || ((deg > 225) && (deg < 315)) ) {
+        player.style.transition = '0.25s width, 0.25s font-size, 0.25s line-height';
+    } else {
+        player.style.transition = '0.25s height, 0.25s font-size, 0.25s line-height';
+    }
 }
+
 
 var mainInterval = setInterval(function(){
     
@@ -117,7 +126,7 @@ var mainInterval = setInterval(function(){
     
     /* eat */
     for (var i=0; i<100; i++){
-        if ( ( (cordinateX - foods[i].foodCordinateX) > -eatDistance ) && ( (cordinateX - foods[i].foodCordinateX) < eatDistance ) && ( ((-cordinateY) - foods[i].foodCordinateY) > -eatDistance ) && ( ((-cordinateY) - foods[i].foodCordinateY) < eatDistance ) ) {
+        if ( Math.sqrt(Math.pow((cordinateX - foods[i].foodCordinateX), 2) + Math.pow((-cordinateY - foods[i].foodCordinateY), 2)) < eatDistance ) {
             
             computFoodCordinate(i);
             eat('food');
