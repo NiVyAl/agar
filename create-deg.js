@@ -4,10 +4,12 @@ var time;
 var intervalId;
 var square = document.querySelector('.square');
 var mapPlayer = document.getElementById('mapPlayer');
-var player = document.querySelector('.player');
+var player = document.querySelectorAll('.player');
 var playerDiameter = 100;
 var eatDistance = 50;
 var playerFontSize = 18;
+
+console.log(player);
 
 var changeX = 0;
 var changeY = 0;
@@ -22,8 +24,8 @@ var foods = new Array();
 
 var computFoodCordinate = function(numberFood){
     var x = Math.floor(Math.random() * 2900) + 50;
-    var y = Math.floor(Math.random() * 1400) - 700
-    document.querySelector('.food-' + numberFood).style.transform = 'translate(' + x +'px, ' + y + 'px)'
+    var y = Math.floor(Math.random() * 1400) - 700;
+    document.querySelector('.food-' + numberFood).style.transform = 'translate(' + x +'px, ' + y + 'px)';
     
     foods[numberFood] = {
         foodCordinateX: x,
@@ -36,28 +38,34 @@ for (var i=0; i<100; i++) {
     square.appendChild(foods[i]);
     foods[i].classList.add('food');
     foods[i].classList.add('food-' + i);
+    foods[i].classList.add('food-color-' + (Math.floor(Math.random()*5)+1) )
     
     computFoodCordinate(i);
     
 };
 
+var sizeChange = function(playerDiameter, increaseProcent) {
+    increaseProcent = playerDiameter/increaseProcent;
+    playerFontSize = playerFontSize * increaseProcent;
+    for (i=0; i< player.length; i++){
+        player[i].style.width = playerDiameter + 'px';
+        player[i].style.height = playerDiameter + 'px';
+        player[i].style.lineHeight = (playerDiameter-10) + 'px';
+        player[i].style.fontSize = playerFontSize + 'px';
+    }
+    
+    mapPlayer.style.width = (playerDiameter/10) + 'px';
+    mapPlayer.style.height = (playerDiameter/10) + 'px';
+
+    eatDistance = playerDiameter*0.4;
+}
+
 var eat = function(typeFood) {
     if (typeFood == 'food') {
         var increaseProcent = playerDiameter;
         playerDiameter = Math.sqrt(Math.pow(playerDiameter, 2) + Math.pow(30, 2));
-        increaseProcent = playerDiameter/increaseProcent;
-
-        player.style.width = playerDiameter + 'px';
-        player.style.height = playerDiameter + 'px';
-        player.style.lineHeight = (playerDiameter-10) + 'px';
         
-        mapPlayer.style.width = (playerDiameter/10) + 'px';
-        mapPlayer.style.height = (playerDiameter/10) + 'px';
-        
-        eatDistance = playerDiameter*0.4;
-        
-        playerFontSize = playerFontSize * increaseProcent;
-        player.style.fontSize = playerFontSize + 'px';
+        sizeChange(playerDiameter, increaseProcent);
     }
 }
 /* */
@@ -98,16 +106,16 @@ var move2 = function(deg) {
     
     changeX = changeX * (10 - playerDiameter/40); // если игрок больше 400px то движемся в обратную сторону
     changeY = changeY * (10 - playerDiameter/40);
-    console.log('changeX: ' + changeX);
-    console.log('changeY: ' + changeY);
+    //console.log('changeX: ' + changeX);
+    //console.log('changeY: ' + changeY);
     
-    /* анимация поедания */
+    /* анимация поедания 
     
     if (((deg > 45) && (deg < 135)) || ((deg > 225) && (deg < 315)) ) {
         player.style.transition = '0.25s width, 0.25s font-size, 0.25s line-height';
     } else {
         player.style.transition = '0.25s height, 0.25s font-size, 0.25s line-height';
-    }
+    } */
 }
 
 
@@ -137,6 +145,16 @@ var mainInterval = setInterval(function(){
     
 }, 10);
 
+
+var split = function() {
+    increaseProcent = playerDiameter;
+    playerDiameter = playerDiameter/2;
+    sizeChange(playerDiameter, increaseProcent);
+    
+    var playerSpl = document.createElement('div');
+    detector.insertBefore(playerSpl, detector.firstChild);
+    playerSpl.classList.add('player');
+}
 
 /* старая функция
 
