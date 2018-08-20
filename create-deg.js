@@ -5,18 +5,29 @@ var intervalId;
 var square = document.querySelector('.square');
 var mapPlayer = document.getElementById('mapPlayer');
 var player = document.querySelectorAll('.player');
-var playerDiameter = 100;
-var eatDistance = 50;
-var playerFontSize = 18;
 
+var playerDiameter = new Array();
+playerDiameter[0] = 100;
+
+var playerFontSize = new Array();
+playerFontSize[0] = 18;
+
+var playerContainer = document.querySelector('.player-container');
 console.log(player);
 
-var changeX = 0;
-var changeY = 0;
+var changeX = new Array;
+changeX[0] = 0;
 
-var cordinateX = Math.floor(Math.random() * 2950) + 50;
-var cordinateY = Math.floor(Math.random() * 1400) - 700;
-square.style.transform = 'translate(' + (-cordinateX) +'px, ' + (-cordinateY) + 'px)';
+var changeY = new Array;
+changeY[0] = 0
+
+var cordinateX = new Array;
+cordinateX[0] = Math.floor(Math.random() * 2950) + 50
+
+var cordinateY = new Array;
+cordinateY[0] = Math.floor(Math.random() * 1400) - 700;
+
+square.style.transform = 'translate(' + (-cordinateX[0]) +'px, ' + (-cordinateY[0]) + 'px)';
 
 
 /* food */
@@ -44,28 +55,31 @@ for (var i=0; i<100; i++) {
     
 };
 
-var sizeChange = function(playerDiameter, increaseProcent) {
-    increaseProcent = playerDiameter/increaseProcent;
-    playerFontSize = playerFontSize * increaseProcent;
-    for (i=0; i< player.length; i++){
-        player[i].style.width = playerDiameter + 'px';
-        player[i].style.height = playerDiameter + 'px';
-        player[i].style.lineHeight = (playerDiameter-10) + 'px';
-        player[i].style.fontSize = playerFontSize + 'px';
-    }
-    
-    mapPlayer.style.width = (playerDiameter/10) + 'px';
-    mapPlayer.style.height = (playerDiameter/10) + 'px';
+/* */
 
-    eatDistance = playerDiameter*0.4;
+/* Eat */
+
+var sizeChange = function(playerNumber, increaseProcent) {
+    increaseProcent = playerDiameter[playerNumber]/increaseProcent;
+    playerFontSize[playerNumber] = playerFontSize[playerNumber] * increaseProcent;
+    
+    player[playerNumber].style.width = playerDiameter[playerNumber] + 'px';
+    player[playerNumber].style.height = playerDiameter[playerNumber] + 'px';
+    player[playerNumber].style.lineHeight = (playerDiameter[playerNumber]-10) + 'px';
+    player[playerNumber].style.fontSize = playerFontSize[playerNumber] + 'px';
+    
+    mapPlayer.style.width = (playerDiameter[0]/10) + 'px';
+    mapPlayer.style.height = (playerDiameter[0]/10) + 'px';
+
+    //eatDistance = playerDiameter*0.4;
 }
 
-var eat = function(typeFood) {
+var eat = function(typeFood, playerNumber) {
     if (typeFood == 'food') {
-        var increaseProcent = playerDiameter;
-        playerDiameter = Math.sqrt(Math.pow(playerDiameter, 2) + Math.pow(30, 2));
+        var increaseProcent = playerDiameter[playerNumber];
+        playerDiameter[playerNumber] = Math.sqrt(Math.pow(playerDiameter[playerNumber], 2) + Math.pow(30, 2));
         
-        sizeChange(playerDiameter, increaseProcent);
+        sizeChange(playerNumber, increaseProcent);
     }
 }
 /* */
@@ -81,33 +95,39 @@ for (var i=0; i<180; i++) {     /* генерация градусов */
 };
 
 var move2 = function(deg) {
-    if ((deg <= 90) && (deg >= 0)) {
-        changeX = 1 - deg/90;
-        changeY = 1 - changeX;
+    
+    for (var i = 0; i<player.length; i++){
+        
+        if ((deg <= 90) && (deg >= 0)) {
+            changeX[i] = 1 - deg/90;
+            changeY[i] = 1 - changeX[i];
+        }
+
+        if ((deg > 90) && (deg <= 180)){
+            deg = deg - 90
+            changeY[i] = 1 - deg/90;
+            changeX[i] = -(1 - changeY[i]);
+        }
+
+        if ((deg > 180) && (deg <= 270)){
+            deg = deg - 180;
+            changeX[i] = -(1 - deg/90);
+            changeY[i] = -(1 + changeX[i]);
+        }
+
+        if ((deg > 270) && (deg <= 360)){
+            deg = deg - 270;
+            changeY[i] = -(1 - deg/90);
+            changeX[i] = 1 + changeY[i];
+        }
+        console.log(i + ' от X: ' + changeX[i]);
+    
+        changeX[i] = changeX[i] * (10 - playerDiameter[i]/40); // если игрок больше 400px то движемся в обратную сторону
+        changeY[i] = changeY[i] * (10 - playerDiameter[i]/40);
+        
+        
     }
     
-    if ((deg > 90) && (deg <= 180)){
-        deg = deg - 90
-        changeY = 1 - deg/90;
-        changeX = -(1 - changeY);
-    }
-    
-    if ((deg > 180) && (deg <= 270)){
-        deg = deg - 180;
-        changeX = -(1 - deg/90);
-        changeY = -(1 + changeX);
-    }
-    
-    if ((deg > 270) && (deg <= 360)){
-        deg = deg - 270;
-        changeY = -(1 - deg/90);
-        changeX = 1 + changeY;
-    }
-    
-    changeX = changeX * (10 - playerDiameter/40); // если игрок больше 400px то движемся в обратную сторону
-    changeY = changeY * (10 - playerDiameter/40);
-    //console.log('changeX: ' + changeX);
-    //console.log('changeY: ' + changeY);
     
     /* анимация поедания 
     
@@ -121,39 +141,60 @@ var move2 = function(deg) {
 
 var mainInterval = setInterval(function(){
     
-    if (((playerDiameter/2) < (changeX + cordinateX)) && ((3000-playerDiameter/2) > (changeX + cordinateX)) ) {
-        cordinateX = changeX + cordinateX;
-    };
-    
-    if ( ((changeY + cordinateY) > (-750 + playerDiameter/2)) && ((changeY + cordinateY) < (750 - playerDiameter/2) ) ) {
-        cordinateY = changeY + cordinateY;
+    for (var i=0; i<player.length; i++){
+        if (((playerDiameter[i]/2) < (changeX[i] + cordinateX[i])) && ((3000-playerDiameter[i]/2) > (changeX[i] + cordinateX[i])) ) {
+            cordinateX[i] = changeX[i] + cordinateX[i];
+        };
+
+        if ( ((changeY[i] + cordinateY[i]) > (-750 + playerDiameter[i]/2)) && ((changeY[i] + cordinateY[i]) < (750 - playerDiameter[i]/2) ) ) {
+            cordinateY[i] = changeY[i] + cordinateY[i];
+        }
+        
+        square.style.transform = 'translate(' + (-cordinateX[i]) + 'px, ' + (cordinateY[i]) + 'px)';
+        mapPlayer.style.transform = 'translate(' + (cordinateX[i]/10) + 'px, ' + (-cordinateY[i]/10) + 'px)';
+        
+        for (var j=0; j<100; j++){
+            if (j == 2) {
+                //console.log();
+            }
+            
+            if ( Math.sqrt(Math.pow((cordinateX[i] - foods[j].foodCordinateX), 2) + Math.pow((-cordinateY[i] - foods[j].foodCordinateY), 2)) < playerDiameter[i]*0.4 ) {
+                
+                console.log('eat');
+                computFoodCordinate(j);
+                eat('food', i);
+            }
+        }  
     }
     
-    square.style.transform = 'translate(' + (-cordinateX) + 'px, ' + (cordinateY) + 'px)';
-    mapPlayer.style.transform = 'translate(' + (cordinateX/10) + 'px, ' + (-cordinateY/10) + 'px)';
-    
-    /* eat */
-    for (var i=0; i<100; i++){
-        if ( Math.sqrt(Math.pow((cordinateX - foods[i].foodCordinateX), 2) + Math.pow((-cordinateY - foods[i].foodCordinateY), 2)) < eatDistance ) {
-            
-            computFoodCordinate(i);
-            eat('food');
-        }
-    }    
-        
-    /* */
     
 }, 10);
 
 
 var split = function() {
-    increaseProcent = playerDiameter;
-    playerDiameter = playerDiameter/2;
-    sizeChange(playerDiameter, increaseProcent);
+    increaseProcent = playerDiameter[player.length-1];
+    console.log(playerDiameter[0]);
+    playerDiameter[player.length-1] = playerDiameter[player.length-1]/2;
+    sizeChange(player.length-1, increaseProcent);
     
     var playerSpl = document.createElement('div');
-    detector.insertBefore(playerSpl, detector.firstChild);
+    playerContainer.appendChild(playerSpl);
     playerSpl.classList.add('player');
+    playerSpl.style.transform = 'translate(100px, 100px)';
+    
+    player = document.querySelectorAll('.player');
+    console.log(playerDiameter[0]);
+    playerDiameter[player.length-1] = playerDiameter[player.length-2];
+    playerFontSize[player.length-1] = playerFontSize[player.length-2];
+    console.log(playerDiameter[1]);
+    
+    sizeChange(player.length-1, increaseProcent);
+    
+    /*
+    changeX[player.length-1] = changeX[player.length-2];
+    changeY[player.length-1] = changeX[player.length-2];
+    cordinateX[player.length-1] = changeX[player.length-2];
+    cordinateY[player.length-1] = changeX[player.length-2]; */
 }
 
 /* старая функция

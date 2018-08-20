@@ -67,8 +67,8 @@ body {
     transition: 0.5s width, 0.5s height, 0.5s font-size, 0.5s line-height;
 }
 
-.player:nth-child(2){
-    right: 200px;
+.player:first-child {
+    /right: 200px;
 }
 
 .grad {
